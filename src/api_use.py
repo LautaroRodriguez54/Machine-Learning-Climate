@@ -12,7 +12,7 @@ params = {
     "stations": "USW00014607",  #  CARIBOU WEATHER FORECAST OFFICE, ME US 
     "startDate": "2020-01-01",
     "endDate": "2025-12-31",
-    "dataTypes": "DATE,TMAX,TMIN,PRCP,SNOW,AWND",
+    "dataTypes": "DATE,TMAX,TMIN,PRCP,SNOW,AWND,LATITUDE,LONGITUDE,ELEVATION",
     "format": "json",
     "units": "metric"
 }
@@ -26,7 +26,7 @@ response = requests.get(BASE_URL, params=params)
 # Verificar que la respuesta sea correcta
 if response.status_code == 200:
     data = response.json()
-    print("Descarga exitosa ✅")
+    print("Descarga exitosa de datos.")
 else:
     print("Error:", response.status_code)
     print(response.text)

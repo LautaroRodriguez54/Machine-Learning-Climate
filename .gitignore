@@ -1,0 +1,43 @@
+# PYTHON
+
+**pycache**/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# C extensions
+
+*.so
+
+# ENVIRONMENTS
+
+venv/
+env/
+ENV/
+.venv/
+
+# Conda
+
+.conda/
+conda-meta/
+
+# JUPYTER
+
+.ipynb_checkpoints
+
+# LOGS
+
+logs/
+*.log
+
+# VSCode
+
+.vscode/*
+!.vscode/settings.json
+
+# MISC
+
+*.tmp
+*.cache
+*.bak
