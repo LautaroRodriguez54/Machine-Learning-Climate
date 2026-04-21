@@ -1,9 +1,9 @@
-# Predicción de lluvia mediante Machine Learning  
+# 🌧️ Predicción de lluvia mediante Machine Learning  
 ## Proyecto de Data Science – Serie Temporal Climática
 
 ---
 
-## Dataset
+## 📊 Dataset
 
 Este proyecto utiliza datos climáticos históricos provenientes de la estación meteorológica:
 
@@ -11,161 +11,168 @@ Este proyecto utiliza datos climáticos históricos provenientes de la estación
 Administrada por la **National Oceanic and Atmospheric Administration (NOAA)**  
 Dataset: Global Historical Climatology Network – Daily (GHCN-Daily)
 
-Período analizado: 2020 – 2025  
-Frecuencia: Datos diarios
+- Período analizado: **2020 – 2025**
+- Frecuencia: **Datos diarios**
 
-Variables utilizadas:
+### Variables originales
 
-- DATE → Fecha
-- TMAX → Temperatura máxima diaria (°C)
-- TMIN → Temperatura mínima diaria (°C)
-- PRCP → Precipitación diaria (mm)
-- SNOW → Nieve caída diaria (mm)
-- SNWD → Nieve acumulada en superficie (mm)
-
----
-
-## Objetivo del Proyecto
-
-Desarrollar un modelo de clasificación supervisada capaz de predecir si un día presentará lluvia (`RAIN = 1`) o no (`RAIN = 0`) utilizando variables meteorológicas observadas.
-
-El problema se aborda como:
-
-> Clasificación binaria en una serie temporal climática.
+- `DATE` → Fecha  
+- `TMAX` → Temperatura máxima (°C)  
+- `TMIN` → Temperatura mínima (°C)  
+- `PRCP` → Precipitación (mm)  
+- `SNOW` → Nieve caída (mm)  
+- `SNWD` → Nieve acumulada (mm)
 
 ---
 
-## Hipótesis de Trabajo
+## 🎯 Objetivo del Proyecto
 
-### Hipótesis Principal
+Desarrollar un modelo de **clasificación supervisada** capaz de predecir si un día presentará lluvia:
 
-H1:  
-Es posible predecir la ocurrencia de lluvia diaria a partir de variables térmicas y condiciones de superficie (nieve acumulada).
+- `RAIN = 1` → Hay lluvia  
+- `RAIN = 0` → No hay lluvia  
 
----
-
-### Hipótesis Físicas Subyacentes
-
-1. La temperatura máxima y mínima influyen en la probabilidad de precipitación líquida.
-2. La amplitud térmica diaria puede actuar como indicador indirecto de estabilidad atmosférica.
-3. La presencia de nieve acumulada puede modificar la probabilidad de precipitación líquida.
-4. La lluvia es un fenómeno no puramente aleatorio, sino condicionado por variables atmosféricas medibles.
+> Problema: Clasificación binaria sobre serie temporal climática.
 
 ---
 
-## Metodología Utilizada (Hasta el Momento)
+## 🧠 Hipótesis de Trabajo
 
-### 1 Obtención de datos
-
-Los datos fueron descargados mediante la API REST oficial de NOAA en formato JSON, lo cual permitió:
-
-- Automatización del proceso
-- Reproducibilidad
-- Control de variables descargadas
+- La temperatura influye en la probabilidad de precipitación  
+- La amplitud térmica refleja estabilidad atmosférica  
+- La nieve acumulada impacta en la ocurrencia de lluvia  
+- La lluvia no es aleatoria, sino parcialmente predecible mediante variables observables  
 
 ---
 
-### 2 Estructuración del Proyecto
+## ⚙️ Metodología
 
-Se implementó una arquitectura modular:
-
-Separación clara entre:
-- Exploración (notebooks)
-- Lógica reutilizable (src)
+### 1. Obtención de datos
+- Descarga mediante API REST de NOAA  
+- Proceso reproducible y automatizado  
 
 ---
 
-### 3 Ingeniería de Variables
+### 2. Ingeniería de variables
 
-Se generaron variables derivadas:
+Se generaron nuevas features:
 
-- TEMP_MEAN = (TMAX + TMIN) / 2
-- TEMP_RANGE = TMAX - TMIN
-- YEAR, MONTH, DAY
+- `TEMP_MEAN = (TMAX + TMIN) / 2`  
+- `TEMP_RANGE = TMAX - TMIN`  
+- Variables temporales: `YEAR`, `MONTH`, `DAY`  
 - Variable objetivo:  
-  RAIN = 1 si PRCP > 0
+  - `RAIN = 1 si PRCP > 0`
 
 ---
 
-### 4 Análisis Exploratorio (EDA)
+### 3. Análisis Exploratorio (EDA)
 
-Se realizó:
+Se analizaron:
 
-- Análisis de proporción de días con lluvia (~43%)
-- Análisis de estacionalidad
-- Gráficos mensuales de nieve vs temperatura media
-- Evaluación de distribución temporal
-
----
-
-### 5 División Temporal del Dataset
-
-Dado que se trata de una serie temporal, se evitó el uso de `train_test_split` aleatorio.
-
-Se utilizó un corte cronológico:
-
-- Entrenamiento: 2020 – 2024
-- Test: 2025
-
-Esto respeta la causalidad temporal y evita data leakage.
+- Distribución de días con lluvia (~43%)  
+- Estacionalidad  
+- Relación entre temperatura, nieve y precipitación  
+- Correlaciones entre variables  
 
 ---
 
-### 6 Modelo Inicial
+### 4. División del dataset
 
-Se entrenó un modelo de:
+Se utilizó un **split temporal** para evitar data leakage:
 
-Decision Tree Classifier
-
-Parámetros iniciales:
-
-- max_depth = 4
-- min_samples_leaf = 20
-- random_state = 42
-
-El objetivo de este modelo inicial es:
-
-- Obtener interpretabilidad
-- Analizar variables más relevantes
-- Establecer una línea base (baseline)
+- Train → 2020–2024  
+- Test → 2025  
 
 ---
 
-## Próximos Pasos
+### 5. Selección de variables
 
-- Evaluación detallada de métricas (Precision, Recall, F1)
-- Comparación con KNN
-- Incorporación de variables temporales (rolling mean)
-- Análisis de importancia de variables
-- Evaluación de overfitting
-- Eventual extensión a clasificación multiclase (seco / lluvia / nieve)
+Se aplicó `SelectKBest` con `f_classif` para identificar las variables más relevantes.
 
----
+Features seleccionadas:
 
-## Enfoque Científico
-
-Este proyecto combina:
-
-- Fundamentos físicos (termodinámica y procesos atmosféricos)
-- Análisis estadístico
-- Machine Learning supervisado
-- Buenas prácticas de ingeniería de datos
+- `TMIN`  
+- `TEMP_RANGE`  
+- `SNOW`  
 
 ---
 
-## Tecnologías Utilizadas
+### 6. Modelado
 
-- Python 3.11
-- Pandas
-- NumPy
-- Seaborn
-- Matplotlib
-- Scikit-learn
-- Conda (gestión de entorno)
+Se entrenaron y compararon tres modelos de clasificación:
+
+- 🌳 Decision Tree  
+- 📈 Logistic Regression  
+- 📍 K-Nearest Neighbors (KNN)  
+
+Se aplicó **estandarización de variables** para mantener consistencia y facilitar futuros pipelines.
 
 ---
 
-## Estado Actual
+### 7. Evaluación de modelos
 
-Proyecto en desarrollo – Fase de modelado inicial.
+Métricas utilizadas:
 
+- Accuracy  
+- Matriz de confusión  
+- Precision, Recall, F1-score  
+
+#### Resultados principales
+
+| Modelo               | Accuracy |
+|---------------------|----------|
+| Logistic Regression | ~0.70    |
+| KNN                 | ~0.66    |
+| Decision Tree       | ~0.66    |
+
+---
+
+## 🏆 Conclusiones
+
+- **Logistic Regression** fue el modelo con mejor desempeño general  
+- Los modelos presentan dificultad para detectar correctamente días con lluvia (clase positiva)  
+- La simplicidad y estabilidad del modelo lineal lo hacen adecuado para este problema  
+- El problema presenta complejidad inherente debido a la naturaleza climática  
+
+---
+
+## 🔄 Pipelines
+
+Se implementaron pipelines con `sklearn.pipeline` para:
+
+- Unificar preprocesamiento y modelado  
+- Reducir duplicación de código  
+- Facilitar escalabilidad futura  
+
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- Python 3.11  
+- Pandas  
+- NumPy  
+- Matplotlib / Seaborn  
+- Scikit-learn  
+- Conda  
+
+---
+
+## 🚀 Próximos pasos
+
+- Optimización de hiperparámetros  
+- Evaluación con validación cruzada  
+- Feature engineering avanzado (rolling features)  
+- Incorporación de modelos más complejos (Random Forest, Gradient Boosting)  
+- Extensión a problemas multiclase  
+
+---
+
+## 📌 Estado del proyecto
+
+✔ EDA completo  
+✔ Feature engineering  
+✔ Modelado y comparación de modelos  
+✔ Implementación de pipelines  
+
+➡ Proyecto listo para evolución a etapas más avanzadas (DS2 / DS3)
