@@ -1,0 +1,4 @@
+Model,model__solver,model__penalty,model__C,model__kernel,model__gamma,model__subsample,model__n_estimators,model__max_depth,model__learning_rate,model__colsample_bytree
+Logistic Regression,sag,l2,100.0,,,,,,,
+SVM,,,100.0,rbf,0.01,,,,,
+XGBoost,,,,,,0.7,100.0,3.0,0.1,0.8

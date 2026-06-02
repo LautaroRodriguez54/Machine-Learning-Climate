@@ -1,178 +1,77 @@
-# 🌧️ Predicción de lluvia mediante Machine Learning  
-## Proyecto de Data Science – Serie Temporal Climática
+# 🌧️ Rain Prediction using Machine Learning
 
----
+Proyecto de Data Science enfocado en la predicción de precipitaciones mediante técnicas de Machine Learning utilizando datos meteorológicos históricos.
+
+## 🎯 Objetivo
+
+Desarrollar un modelo capaz de predecir la ocurrencia de lluvia al día siguiente a partir de variables climáticas observadas, evaluando diferentes algoritmos de clasificación y su capacidad de generalización.
 
 ## 📊 Dataset
 
-Este proyecto utiliza datos climáticos históricos provenientes de la estación meteorológica:
+Datos meteorológicos diarios provenientes de la estación:
 
-**Caribou Weather Forecast Office (USW00014607)**  
-Administrada por la **National Oceanic and Atmospheric Administration (NOAA)**  
-Dataset: Global Historical Climatology Network – Daily (GHCN-Daily)
+**Caribou Weather Forecast Office (USW00014607)**
+Fuente: NOAA – Global Historical Climatology Network (GHCN)
 
-- Período analizado: **2020 – 2025**
-- Frecuencia: **Datos diarios**
+Periodo analizado: **2020–2025**
 
-### Variables originales
+## 🔍 Proceso desarrollado
 
-- `DATE` → Fecha  
-- `TMAX` → Temperatura máxima (°C)  
-- `TMIN` → Temperatura mínima (°C)  
-- `PRCP` → Precipitación (mm)  
-- `SNOW` → Nieve caída (mm)  
-- `SNWD` → Nieve acumulada (mm)
+* Limpieza y preparación de datos
+* Análisis Exploratorio (EDA)
+* Ingeniería de variables
+* Selección de características
+* Entrenamiento y comparación de modelos
+* Optimización de hiperparámetros
+* Validación cruzada estratificada
+* Evaluación e interpretación de resultados
 
----
+## 🤖 Modelos evaluados
 
-## 🎯 Objetivo del Proyecto
+* Logistic Regression
+* XGBoost
+* Support Vector Machine (SVM)
 
-Desarrollar un modelo de **clasificación supervisada** capaz de predecir si un día presentará lluvia:
+## 🏆 Resultado Final
 
-- `RAIN = 1` → Hay lluvia  
-- `RAIN = 0` → No hay lluvia  
+El modelo **SVM optimizado** obtuvo el mejor desempeño general:
 
-> Problema: Clasificación binaria sobre serie temporal climática.
+| Métrica   | Valor |
+| --------- | ----- |
+| Accuracy  | 0.80  |
+| Precision | 0.76  |
+| Recall    | 0.79  |
+| F1 Score  | 0.77  |
+| ROC-AUC   | 0.88  |
 
----
+## 📌 Principales Hallazgos
 
-## 🧠 Hipótesis de Trabajo
+* Las variables relacionadas con humedad, temperatura, presión atmosférica y viento fueron las más relevantes para la predicción.
+* La disponibilidad y calidad de los datos tuvo un impacto mayor que la elección del algoritmo.
+* Los modelos de Machine Learning demostraron capacidad para anticipar eventos de precipitación utilizando únicamente información meteorológica histórica.
 
-- La temperatura influye en la probabilidad de precipitación  
-- La amplitud térmica refleja estabilidad atmosférica  
-- La nieve acumulada impacta en la ocurrencia de lluvia  
-- La lluvia no es aleatoria, sino parcialmente predecible mediante variables observables  
+## 🛠️ Tecnologías
 
----
+* Python
+* Pandas
+* NumPy
+* Scikit-Learn
+* XGBoost
+* Matplotlib
+* Seaborn
 
-## ⚙️ Metodología
+## 📂 Estructura del Proyecto
 
-### 1. Obtención de datos
-- Descarga mediante API REST de NOAA  
-- Proceso reproducible y automatizado  
+```text
+data/
+models/
+notebooks/
+results/
+src/
+```
 
----
+## 🚀 Estado
 
-### 2. Ingeniería de variables
+✅ Proyecto finalizado
 
-Se generaron nuevas features:
-
-- `TEMP_MEAN = (TMAX + TMIN) / 2`  
-- `TEMP_RANGE = TMAX - TMIN`  
-- Variables temporales: `YEAR`, `MONTH`, `DAY`  
-- Variable objetivo:  
-  - `RAIN = 1 si PRCP > 0`
-
----
-
-### 3. Análisis Exploratorio (EDA)
-
-Se analizaron:
-
-- Distribución de días con lluvia (~43%)  
-- Estacionalidad  
-- Relación entre temperatura, nieve y precipitación  
-- Correlaciones entre variables  
-
----
-
-### 4. División del dataset
-
-Se utilizó un **split temporal** para evitar data leakage:
-
-- Train → 2020–2024  
-- Test → 2025  
-
----
-
-### 5. Selección de variables
-
-Se aplicó `SelectKBest` con `f_classif` para identificar las variables más relevantes.
-
-Features seleccionadas:
-
-- `TMIN`  
-- `TEMP_RANGE`  
-- `SNOW`  
-
----
-
-### 6. Modelado
-
-Se entrenaron y compararon tres modelos de clasificación:
-
-- 🌳 Decision Tree  
-- 📈 Logistic Regression  
-- 📍 K-Nearest Neighbors (KNN)  
-
-Se aplicó **estandarización de variables** para mantener consistencia y facilitar futuros pipelines.
-
----
-
-### 7. Evaluación de modelos
-
-Métricas utilizadas:
-
-- Accuracy  
-- Matriz de confusión  
-- Precision, Recall, F1-score  
-
-#### Resultados principales
-
-| Modelo               | Accuracy |
-|---------------------|----------|
-| Logistic Regression | ~0.70    |
-| KNN                 | ~0.66    |
-| Decision Tree       | ~0.66    |
-
----
-
-## 🏆 Conclusiones
-
-- **Logistic Regression** fue el modelo con mejor desempeño general  
-- Los modelos presentan dificultad para detectar correctamente días con lluvia (clase positiva)  
-- La simplicidad y estabilidad del modelo lineal lo hacen adecuado para este problema  
-- El problema presenta complejidad inherente debido a la naturaleza climática  
-
----
-
-## 🔄 Pipelines
-
-Se implementaron pipelines con `sklearn.pipeline` para:
-
-- Unificar preprocesamiento y modelado  
-- Reducir duplicación de código  
-- Facilitar escalabilidad futura  
-
-
----
-
-## 🛠️ Tecnologías utilizadas
-
-- Python 3.11  
-- Pandas  
-- NumPy  
-- Matplotlib / Seaborn  
-- Scikit-learn  
-- Conda  
-
----
-
-## 🚀 Próximos pasos
-
-- Optimización de hiperparámetros  
-- Evaluación con validación cruzada  
-- Feature engineering avanzado (rolling features)  
-- Incorporación de modelos más complejos (Random Forest, Gradient Boosting)  
-- Extensión a problemas multiclase  
-
----
-
-## 📌 Estado del proyecto
-
-✔ EDA completo  
-✔ Feature engineering  
-✔ Modelado y comparación de modelos  
-✔ Implementación de pipelines  
-
-➡ Proyecto listo para evolución a etapas más avanzadas (DS2 / DS3)
+Incluye análisis exploratorio, ingeniería de variables, comparación de modelos, optimización de hiperparámetros y conclusiones finales.
